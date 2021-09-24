@@ -2,10 +2,10 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="FixSmartIndent.35f7a047-2d81-465a-84dd-209a83adcbc0" Version="1.0" Language="en-US" Publisher="Moon Sung Zhang" />
-        <DisplayName>FixSmartIndent</DisplayName>
-        <Description xml:space="preserve">In javascript/typescript editor, if you disable auto formatting and enable smart indent, closing brace ('}') does not correctly dedents. see :
-https://developercommunity.visualstudio.com/t/closing-brace-does-not-dedent-in-javascr/1110276
-It looks like they decided not to fix the problem even in VS2022, so I made a simple patch myself.</Description>
+        <DisplayName>Fix Javascript/Typescript Smart Indent Bug</DisplayName>
+        <Description xml:space="preserve">In javascript/typescript editor, if you disable auto formatting and enable smart indent, closing brace ('}') does not correctly dedents.
+This extension fixes this bug.</Description>
+        <MoreInfo>https://marketplace.visualstudio.com/items?itemName=sw6ueyz.FixSmartIndent</MoreInfo>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0,17.0)" />
