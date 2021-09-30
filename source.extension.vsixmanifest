@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="FixSmartIndent.35f7a047-2d81-465a-84dd-209a83adcbc0" Version="1.0" Language="en-US" Publisher="Moon Sung Zhang" />
+        <Identity Id="FixSmartIndent.35f7a047-2d81-465a-84dd-209a83adcbc0" Version="1.1" Language="en-US" Publisher="Moon Sung Zhang" />
         <DisplayName>Fix Javascript/Typescript Smart Indent Bug</DisplayName>
-        <Description xml:space="preserve">In javascript/typescript editor, if you disable auto formatting and enable smart indent, closing brace ('}') does not correctly dedents.
+        <Description xml:space="preserve">In javascript/typescript editor, if you disable auto formatting and enable smart indent, braces ({}) does not correctly indents/dedents.
 This extension fixes this bug.</Description>
         <MoreInfo>https://marketplace.visualstudio.com/items?itemName=sw6ueyz.FixSmartIndent</MoreInfo>
     </Metadata>

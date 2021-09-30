@@ -210,8 +210,9 @@ internal class BraceKeyCommandHandler : ICommandHandler<TypeCharCommandArgs>
     public bool ExecuteCommand(
         TypeCharCommandArgs args, CommandExecutionContext executionContext)
     {
-        // '}' 키를 눌렀을 때만 처리
-        if ( args.TypedChar != '}' )
+        // '{'/'}' 키를 눌렀을 때만 처리
+        char cTypedChar = args.TypedChar;
+        if ( cTypedChar != '{' && cTypedChar != '}' )
             return false;
 
         // 선택이 있는 경우 무시
@@ -223,24 +224,35 @@ internal class BraceKeyCommandHandler : ICommandHandler<TypeCharCommandArgs>
         // 현재 행이 비어 있는 경우에만 처리
         var apos = tv.Caret.Position.BufferPosition;
         var line = apos.GetContainingLine();
+        if ( line.LineNumber == 0 )
+            return false;
         if ( 0 < line.GetText().Trim().Length )
             return false;
 
-        // 행 끝에 '{' 가 있는 위치로 이동
-        var br = new BackwardReader( apos );
-        if ( !Util.SkipToDanglingOpenBracket( br ) )
-            return false;
+        BackwardReader br;
+
+        if ( cTypedChar == '}' ) {
+            // 행 끝에 '{' 가 있는 위치로 이동
+            br = new BackwardReader( apos );
+            if ( !Util.SkipToDanglingOpenBracket( br ) )
+                return false;
+        }
+        else {
+            // cTypedChar == '{'
+            br = new BackwardReader(
+                apos.Snapshot.GetLineFromLineNumber( line.LineNumber - 1 ).End );
+        }
 
         // 그 행의 인덴트를 측정
         var sIndent = Util.GetIndent( br );
         if ( sIndent == null )
             return false;
 
-        // '}' 키를 누른 행을 인덴트와 '}' 문자를 결합하여 입력
+        // 키를 누른 행을 인덴트와 '{'/'}' 문자를 결합하여 입력
         int nLine = line.LineNumber;
-        args.SubjectBuffer.Replace( line.Extent, sIndent + '}' );
+        args.SubjectBuffer.Replace( line.Extent, sIndent + cTypedChar );
 
-        // 캐럿을 '}' 의 뒤로 이동
+        // 캐럿을 '{'/'}' 의 뒤로 이동
         // 이 때 스냅샷이 변경되었으므로
         // 위의 로컬 변수들을 무시하고 다시 읽어야 한다.
         tv.Caret.MoveTo(
@@ -274,19 +286,25 @@ internal class ReturnKeyCommandHandler : ICommandHandler<ReturnKeyCommandArgs>
         if ( !sel.IsEmpty )
             return false;
 
-        // 리턴 키를 누른 위치에서 그 후의 문자열이 '}' 뿐인 경우에만 처리
+        // 리턴 키를 누른 위치에서 그 후의 문자열이 '{'/'}' 뿐인 경우에만 처리
         var apos = tv.Caret.Position.BufferPosition;
         var line = apos.GetContainingLine();
         var sLine = line.GetText();
         var nHead = apos - line.Start;
         var sTrail = sLine.Substring( nHead ).Trim();
-        if ( sTrail != "}" )
+        if ( sTrail.Length != 1 )
+            return false;
+        char cTrail = sTrail[ 0 ];
+        if ( cTrail != '{' && cTrail != '}' )
             return false;
 
-        // 행 끝에 '{' 가 있는 위치로 이동
         var br = new BackwardReader( apos );
-        if ( !Util.SkipToDanglingOpenBracket( br ) )
-            return false;
+
+        if ( cTrail == '}' ) {
+            // 행 끝에 '{' 가 있는 위치로 이동
+            if ( !Util.SkipToDanglingOpenBracket( br ) )
+                return false;
+        }
 
         // 그 행의 인덴트를 측정
         var sIndent = Util.GetIndent( br );
@@ -306,16 +324,16 @@ internal class ReturnKeyCommandHandler : ICommandHandler<ReturnKeyCommandArgs>
             // 유일한 행이라서 알 수 없는 경우
             sLineBreak = "\r\n";
 
-        // '}' 키를 누른 행을 두 행으로 나누어
-        // 원래 행의 내용과 인덴트와 '}' 문자를 결합하여 입력
+        // '{'/'}' 키를 누른 행을 두 행으로 나누어
+        // 원래 행의 내용과 인덴트와 '{'/'}' 문자를 결합하여 입력
         args.SubjectBuffer.Replace( line.Extent
-            , sLine.Substring( 0, nHead ) + sLineBreak + sIndent + '}' );
+            , sLine.Substring( 0, nHead ) + sLineBreak + sIndent + cTrail );
 
-        // 캐럿을 '}' 의 뒤로 이동
+        // 캐럿을 '{'/'}' 직전으로 이동 (키를 눌렀을 때와는 다름)
         // 이 때 스냅샷이 변경되었으므로 위의 로컬 변수들을 무시하고 다시 읽어야 한다.
         tv.Caret.MoveTo(
             tv.TextSnapshot.GetLineFromLineNumber( nLine + 1 ).Start
-                + ( sIndent.Length + 1 ) );
+                + sIndent.Length );
 
         // 처리 되었으므로 더 이상의 진행을 방지
         return true;
