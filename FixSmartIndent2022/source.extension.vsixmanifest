@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+    <Metadata>
+        <Identity Id="FixSmartIndent2022.3c0117f1-9c12-44e0-8dbb-b54745a7df77" Version="1.1.2" Language="en-US" Publisher="MoonSung Zhang" />
+        <DisplayName>Fix Javascript/Typescript Smart Indent Bug</DisplayName>
+        <Description xml:space="preserve">In javascript/typescript editor, if you disable auto formatting and enable smart indent, braces ({}) does not correctly indents/dedents.
+This extension fixes this bug.</Description>
+        <MoreInfo>https://marketplace.visualstudio.com/items?itemName=sw6ueyz.FixSmartIndent2022</MoreInfo>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,18.0)">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Enterprise">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.7.2,)" />
+    </Dependencies>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+    </Assets>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
+</PackageManifest>

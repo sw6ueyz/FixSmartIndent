@@ -43,6 +43,7 @@ internal class BackwardReader
             m_cPeek = m_sLine[ m_nCol-- ];
             return;
         }
+
         int n = m_line.LineNumber;
         if ( 0 < n ) {
             m_line = m_line.Snapshot.GetLineFromLineNumber( n - 1 );
@@ -51,6 +52,8 @@ internal class BackwardReader
             m_cPeek = '\n';
             return;
         }
+
+        m_nCol = -1;
         m_cPeek = '\0';
     }
 }
@@ -250,7 +253,7 @@ internal class BraceKeyCommandHandler : ICommandHandler<TypeCharCommandArgs>
 
         // 키를 누른 행을 인덴트와 '{'/'}' 문자를 결합하여 입력
         int nLine = line.LineNumber;
-        args.SubjectBuffer.Replace( line.Extent, sIndent + cTypedChar );
+        tv.TextBuffer.Replace( line.Extent, sIndent + cTypedChar );
 
         // 캐럿을 '{'/'}' 의 뒤로 이동
         // 이 때 스냅샷이 변경되었으므로

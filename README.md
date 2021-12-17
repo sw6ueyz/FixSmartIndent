@@ -56,7 +56,7 @@ after fix :
 
 ~~~
 class Test
-{                  // pressing '}' now dedents.
+{                  // pressing '{' now dedents.
 ~~~
 
 
