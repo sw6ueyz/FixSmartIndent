@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor.Commanding.Commands;
 using Microsoft.VisualStudio.Utilities;
 using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.Shell;
+using EnvDTE;
 
 
 // 지정된 SnapshotPoint 가 포함된 행으로부터 역순으로 모든 글자를 읽는 도우미
@@ -60,6 +62,24 @@ internal class BackwardReader
 
 internal static class Util
 {
+    // Ts 또는 Js 파일인가 검사한다.
+    public static bool IsTsJs()
+    {
+        Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+        DTE dte = Package.GetGlobalService( typeof( DTE ) ) as DTE;
+        if ( dte == null || dte.ActiveDocument == null )
+            return false;
+
+        string sName = dte.ActiveDocument.Name;
+        return sName != null && (
+            sName.EndsWith( ".ts", System.StringComparison.OrdinalIgnoreCase )
+            || sName.EndsWith( ".mts", System.StringComparison.OrdinalIgnoreCase )
+            || sName.EndsWith( ".cts", System.StringComparison.OrdinalIgnoreCase )
+            || sName.EndsWith( ".js", System.StringComparison.OrdinalIgnoreCase )
+            || sName.EndsWith( ".mjs", System.StringComparison.OrdinalIgnoreCase )
+            || sName.EndsWith( ".cjs", System.StringComparison.OrdinalIgnoreCase ) );
+    }
+
     // 탭과 공백 문자를 모두 넘긴다.
     public static void SkipSpaceTab( BackwardReader br )
     {
@@ -232,6 +252,11 @@ internal class BraceKeyCommandHandler : ICommandHandler<TypeCharCommandArgs>
         if ( 0 < line.GetText().Trim().Length )
             return false;
 
+        // 파일 명이 Ts Js 중 하나인 경우에만 동작
+        Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+        if ( !Util.IsTsJs() )
+            return false;
+
         BackwardReader br;
 
         if ( cTypedChar == '}' ) {
@@ -299,6 +324,11 @@ internal class ReturnKeyCommandHandler : ICommandHandler<ReturnKeyCommandArgs>
             return false;
         char cTrail = sTrail[ 0 ];
         if ( cTrail != '{' && cTrail != '}' )
+            return false;
+
+        // 파일 명이 Ts Js 중 하나인 경우에만 동작
+        Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+        if ( !Util.IsTsJs() )
             return false;
 
         var br = new BackwardReader( apos );

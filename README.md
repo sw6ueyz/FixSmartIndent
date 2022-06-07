@@ -59,6 +59,8 @@ class Test
 {                  // pressing '{' now dedents.
 ~~~
 
+In version 1.2, this extension triggers in only `.ts`, `.js`, `.mjs`, `.cjs`, `.mts`, `.cts` files.
+
 
 # Notice
 

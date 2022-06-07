@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="FixSmartIndent2022.3c0117f1-9c12-44e0-8dbb-b54745a7df77" Version="1.1.2" Language="en-US" Publisher="MoonSung Zhang" />
+        <Identity Id="FixSmartIndent2022.3c0117f1-9c12-44e0-8dbb-b54745a7df77" Version="1.2" Language="en-US" Publisher="MoonSung Zhang" />
         <DisplayName>Fix Javascript/Typescript Smart Indent Bug</DisplayName>
         <Description xml:space="preserve">In javascript/typescript editor, if you disable auto formatting and enable smart indent, braces ({}) does not correctly indents/dedents.
 This extension fixes this bug.</Description>
